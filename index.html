@@ -6,32 +6,89 @@
 <title>Eject Solutions – Invoice Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy:#1a1f3c; --navy-deep:#111526; --gold:#c9a227; --gold-lt:#e4bb3a;
-  --gold-pale:#fdf7e3; --white:#ffffff; --bg:#e8ecf5;
-  --border:#dce3f0; --muted:#56607e; --radius:10px;
+:root{
+  --navy:#1a1f3c;--navy-deep:#111526;--gold:#c9a227;--gold-lt:#e4bb3a;
+  --gold-pale:#fdf7e3;--white:#fff;--bg:#e8ecf5;--border:#dce3f0;
+  --muted:#56607e;--radius:10px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;}
-.app-bar{background:var(--navy-deep);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:200;box-shadow:0 2px 18px rgba(0,0,0,.4);}
-.bar-left{display:flex;align-items:center;gap:14px;}
-.bar-logo{height:36px;width:auto;filter:brightness(0) invert(1);object-fit:contain;}
-.bar-title{font-size:17px;font-weight:700;color:#fff;letter-spacing:.2px;}
+
+/* ══ LOCK SCREEN ══ */
+#lock-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--navy-deep);
+  display:flex;align-items:center;justify-content:center;
+}
+.lock-card{
+  background:#fff;border-radius:16px;padding:40px 36px;
+  width:90%;max-width:380px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.lock-logo{height:52px;width:auto;margin:0 auto 20px;display:block;filter:none;}
+.lock-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.lock-sub{font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:28px;}
+.lock-input-wrap{position:relative;margin-bottom:16px;}
+.lock-input{
+  width:100%;padding:13px 44px 13px 16px;
+  border:2px solid var(--border);border-radius:9px;
+  font-family:'Poppins',sans-serif;font-size:20px;font-weight:700;
+  color:var(--navy);letter-spacing:6px;text-align:center;
+  background:#f6f8fd;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.lock-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.15);}
+.lock-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);
+}
+.lock-btn{
+  width:100%;padding:13px;background:var(--gold);border:none;border-radius:9px;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;
+  color:var(--navy-deep);cursor:pointer;letter-spacing:.4px;
+  transition:all .18s;box-shadow:0 4px 12px rgba(201,162,39,.4);
+}
+.lock-btn:hover{background:var(--gold-lt);transform:translateY(-1px);}
+.lock-error{
+  font-size:11.5px;color:#e74c3c;font-weight:600;margin-top:10px;
+  display:none;letter-spacing:.3px;
+}
+.lock-dots{display:flex;gap:8px;justify-content:center;margin-bottom:22px;}
+.lock-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--border);transition:background .2s;
+}
+.lock-dot.filled{background:var(--gold);}
+
+/* ══ APP BAR ══ */
+.app-bar{background:var(--navy-deep);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:200;box-shadow:0 2px 18px rgba(0,0,0,.4);}
+.bar-left{display:flex;align-items:center;gap:12px;}
+.bar-logo{height:34px;width:auto;filter:brightness(0) invert(1);object-fit:contain;}
+.bar-title{font-size:16px;font-weight:700;color:#fff;letter-spacing:.2px;line-height:1.2;}
 .bar-title em{font-style:normal;color:var(--gold);}
-.bar-sub{font-size:9.5px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:1.8px;text-transform:uppercase;margin-top:1px;}
-.btn-pdf{background:var(--gold);color:var(--navy-deep);border:none;padding:10px 24px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .18s;box-shadow:0 3px 10px rgba(201,162,39,.45);letter-spacing:.3px;}
-.btn-pdf:hover{background:var(--gold-lt);transform:translateY(-1px);box-shadow:0 5px 16px rgba(201,162,39,.55);}
+.bar-sub{font-size:9px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:1.6px;text-transform:uppercase;margin-top:1px;}
+.btn-pdf{background:var(--gold);color:var(--navy-deep);border:none;padding:9px 20px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .18s;box-shadow:0 3px 10px rgba(201,162,39,.45);white-space:nowrap;}
+.btn-pdf:hover{background:var(--gold-lt);transform:translateY(-1px);}
 .btn-pdf:active{transform:translateY(0);}
-.workspace{display:grid;grid-template-columns:390px 1fr;gap:24px;padding:24px 32px;max-width:1440px;margin:0 auto;align-items:start;}
+
+/* ══ MOBILE TABS ══ */
+.mob-tabs{display:none;background:var(--navy);}
+.mob-tab{flex:1;padding:13px 0;background:none;border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.4px;}
+.mob-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ══ WORKSPACE ══ */
+.workspace{display:grid;grid-template-columns:390px 1fr;gap:24px;padding:24px 28px;max-width:1440px;margin:0 auto;align-items:start;}
+
+/* ══ FORM PANEL ══ */
 .form-panel{background:var(--white);border-radius:var(--radius);box-shadow:0 3px 20px rgba(26,31,60,.09);overflow:hidden;position:sticky;top:78px;max-height:calc(100vh - 94px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .form-panel::-webkit-scrollbar{width:4px;}
 .form-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
-.fp-head{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:10;}
+.fp-head{background:var(--navy);padding:14px 18px;display:flex;align-items:center;gap:9px;}
 .fp-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;flex-shrink:0;}
 .fp-head h2{font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1.6px;}
-.fp-body{padding:18px 18px 22px;}
-.fsec{margin-bottom:16px;}
-.fsec-title{font-size:9.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.fp-body{padding:16px 16px 20px;}
+.fsec{margin-bottom:14px;}
+.fsec-title{font-size:9.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
 .fsec-title::after{content:'';flex:1;height:1px;background:var(--border);}
 .field{margin-bottom:8px;}
 .field label{display:block;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
@@ -39,94 +96,146 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--navy);min
 .field input:focus,.field textarea:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(201,162,39,.13);}
 .field textarea{resize:vertical;min-height:52px;}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.add-row-btn{width:100%;margin-top:6px;padding:9px 0;background:none;border:1.5px dashed var(--gold);border-radius:7px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--gold);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px;}
-.add-row-btn:hover{background:var(--gold-pale);border-color:var(--gold-lt);color:#a07c10;}
+.add-row-btn{width:100%;margin-top:6px;padding:9px 0;background:none;border:1.5px dashed var(--gold);border-radius:7px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--gold);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.add-row-btn:hover{background:var(--gold-pale);}
+
+/* ══ PREVIEW ══ */
 .preview-wrap{display:flex;flex-direction:column;gap:10px;}
 .preview-top{display:flex;align-items:center;justify-content:space-between;}
 .preview-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.3px;}
 .preview-tip{font-size:10px;color:var(--muted);}
+
+/* ══ INVOICE ══ */
 #invoice{background:#fff;width:100%;max-width:820px;border-radius:var(--radius);box-shadow:0 6px 44px rgba(26,31,60,.15);overflow:hidden;font-family:'Poppins',sans-serif;}
-.inv-hdr{background:var(--navy);padding:28px 38px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;overflow:hidden;}
-.inv-hdr::before{content:'';position:absolute;top:0;right:0;border-style:solid;border-width:0 120px 120px 0;border-color:transparent rgba(201,162,39,.18) transparent transparent;}
-.inv-hdr::after{content:'';position:absolute;bottom:0;left:0;border-style:solid;border-width:60px 0 0 60px;border-color:transparent transparent transparent rgba(201,162,39,.09);}
+.inv-hdr{background:var(--navy);padding:26px 36px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden;}
+.inv-hdr::before{content:'';position:absolute;top:0;right:0;border-style:solid;border-width:0 110px 110px 0;border-color:transparent rgba(201,162,39,.18) transparent transparent;}
+.inv-hdr::after{content:'';position:absolute;bottom:0;left:0;border-style:solid;border-width:55px 0 0 55px;border-color:transparent transparent transparent rgba(201,162,39,.09);}
 .inv-logo-box{z-index:2;flex-shrink:0;}
-.inv-logo{height:92px;width:auto;display:block;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,.35));}
+.inv-logo{height:88px;width:auto;display:block;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,.35));}
 .inv-contact-box{z-index:2;text-align:right;}
-.inv-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:7px;}
+.inv-contact-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-bottom:6px;}
 .inv-contact-row:last-child{margin-bottom:0;}
-.ico-circle{width:26px;height:26px;background:rgba(201,162,39,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
-.inv-contact-txt{font-size:13px;font-weight:500;color:rgba(255,255,255,.92);letter-spacing:.2px;}
+.ico-circle{width:24px;height:24px;background:rgba(201,162,39,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.inv-contact-txt{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.92);}
 .inv-strip{height:4px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-lt) 50%,rgba(201,162,39,.2) 100%);}
-.inv-body{padding:26px 38px 22px;}
-.inv-meta{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;}
-.inv-date-txt{font-size:13.5px;font-weight:600;color:var(--navy);}
+.inv-body{padding:24px 36px 20px;}
+.inv-meta{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;}
+.inv-date-txt{font-size:13px;font-weight:600;color:var(--navy);}
 .inv-date-txt span{font-weight:400;color:var(--muted);}
 .inv-no-box{text-align:right;}
 .inv-no-lbl{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px;}
-.inv-no-val{font-size:15px;font-weight:800;color:var(--navy);letter-spacing:.3px;}
-.inv-parties{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
-.inv-party{background:#f7f9fd;border-radius:8px;padding:14px 16px;border-left:3px solid var(--gold);}
-.inv-party-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);margin-bottom:6px;}
-.inv-party-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.4;}
-.inv-party-addr{font-size:11.5px;color:var(--muted);line-height:1.75;}
+.inv-no-val{font-size:15px;font-weight:800;color:var(--navy);}
+.inv-parties{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.inv-party{background:#f7f9fd;border-radius:8px;padding:12px 14px;border-left:3px solid var(--gold);break-inside:avoid;}
+.inv-party-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);margin-bottom:5px;}
+.inv-party-name{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.4;}
+.inv-party-addr{font-size:11px;color:var(--muted);line-height:1.75;}
 .inv-party-addr strong{color:var(--navy);font-weight:600;}
-.inv-table-wrap{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px;}
-.inv-table{width:100%;border-collapse:collapse;font-size:12px;}
+.inv-table-wrap{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px;break-inside:avoid;}
+.inv-table{width:100%;border-collapse:collapse;font-size:11.5px;}
 .inv-table thead tr{background:var(--navy);}
-.inv-table th{padding:11px 12px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.88);text-align:left;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;}
+.inv-table th{padding:10px 11px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.88);text-align:left;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;}
 .inv-table th:last-child{border-right:none;}
-.inv-table td{padding:12px 12px;color:var(--navy);border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle;line-height:1.5;font-size:12px;}
+.inv-table td{padding:11px 11px;color:var(--navy);border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle;line-height:1.5;font-size:11.5px;}
 .inv-table td:last-child{border-right:none;}
 .inv-table tbody tr:last-child td{border-bottom:none;}
 .inv-table tbody tr:nth-child(even) td{background:#f8faff;}
 .td-bold{font-weight:600;color:var(--navy);}
-.inv-notes{border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;break-inside:avoid;page-break-inside:avoid;background:#fafbff;}
-.inv-notes-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
-.inv-notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;}
-.inv-notes-col p{font-size:10.5px;color:var(--muted);line-height:1.8;margin-bottom:7px;}
-.inv-notes-col p:last-child{margin-bottom:0;}
+.inv-notes{border:1px solid var(--border);border-radius:8px;padding:13px 16px;margin-bottom:14px;break-inside:avoid;page-break-inside:avoid;background:#fafbff;}
+.inv-notes-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.inv-notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;}
+.inv-notes-col p{font-size:10.5px;color:var(--muted);line-height:1.8;}
 .inv-notes-col p strong{color:var(--navy);font-weight:600;}
-.inv-total{background:var(--navy);border-radius:8px;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:10px;}
-.inv-total-lbl{font-size:11.5px;font-weight:500;color:rgba(255,255,255,.72);}
-.inv-total-val{font-size:18px;font-weight:800;color:var(--gold-lt);letter-spacing:.4px;white-space:nowrap;}
-.inv-bank{background:var(--gold-pale);border:1px solid rgba(201,162,39,.28);border-radius:8px;padding:14px 18px;margin-bottom:24px;break-inside:avoid;page-break-inside:avoid;}
-.inv-bank-ttl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(201,162,39,.3);display:flex;align-items:center;gap:7px;}
-.inv-bank-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px;}
-.inv-bank-row{font-size:11.5px;color:var(--muted);line-height:1.9;}
+.inv-total{background:var(--navy);border-radius:8px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;break-inside:avoid;}
+.inv-total-lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.72);}
+.inv-total-val{font-size:18px;font-weight:800;color:var(--gold-lt);white-space:nowrap;}
+.inv-bank{background:var(--gold-pale);border:1px solid rgba(201,162,39,.28);border-radius:8px;padding:13px 16px;margin-bottom:20px;break-inside:avoid;page-break-inside:avoid;}
+.inv-bank-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid rgba(201,162,39,.3);display:flex;align-items:center;gap:6px;}
+.inv-bank-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;}
+.inv-bank-row{font-size:11px;color:var(--muted);line-height:1.9;}
 .inv-bank-row strong{color:var(--navy);font-weight:600;}
-.inv-sign{display:flex;justify-content:flex-end;padding-bottom:4px;}
+.inv-sign{display:flex;justify-content:flex-end;padding-bottom:4px;break-inside:avoid;}
 .inv-sign-inner{text-align:center;}
-.inv-stamp-img{display:block;height:75px;width:auto;object-fit:contain;margin:0 auto 5px;}
-.inv-sign-label{display:block;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;text-align:center;}
-.inv-footer{background:var(--navy-deep);padding:13px 38px;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;text-align:center;}
-.inv-footer-icon{font-size:15px;opacity:.75;flex-shrink:0;}
-.inv-footer-txt{font-size:11px;color:rgba(255,255,255,.6);line-height:1.65;text-align:center;}
+.inv-stamp-img{display:block;height:72px;width:auto;object-fit:contain;margin:0 auto 5px;}
+.inv-sign-label{display:block;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;text-align:center;}
+.inv-footer{background:var(--navy-deep);padding:12px 36px;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;}
+.inv-footer-icon{font-size:14px;opacity:.75;flex-shrink:0;}
+.inv-footer-txt{font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.65;text-align:center;}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:900px){
+  .mob-tabs{display:flex;}
+  .workspace{grid-template-columns:1fr;padding:12px;gap:0;}
+  .form-panel{position:static;max-height:none;border-radius:0 0 var(--radius) var(--radius);display:none;overflow-y:visible;}
+  .form-panel.mob-active{display:block;}
+  .preview-wrap{display:none;}
+  .preview-wrap.mob-active{display:flex;}
+  .preview-top{display:none;}
+  .inv-scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);}
+  #invoice{min-width:640px;}
+  .app-bar{padding:0 14px;height:54px;}
+  .bar-title{font-size:13px;}
+  .bar-sub{display:none;}
+  .btn-pdf{padding:8px 13px;font-size:12px;}
+  .bar-logo{height:28px;}
+}
+@media(max-width:480px){
+  .btn-pdf span{display:none;}
+}
+
+/* ══ PRINT ══ */
 @page{size:A4 portrait;margin:0;}
 @media print{
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   html,body{background:white;margin:0;padding:0;width:210mm;}
-  .app-bar,.form-panel,.preview-top{display:none !important;}
+  #lock-screen{display:none !important;}
+  .app-bar,.mob-tabs,.form-panel,.preview-top{display:none !important;}
   .workspace{display:block !important;padding:0 !important;margin:0 !important;}
-  .preview-wrap{gap:0 !important;}
-  #invoice{max-width:210mm !important;width:210mm !important;box-shadow:none !important;border-radius:0 !important;font-size:11px !important;}
+  .preview-wrap{display:block !important;gap:0 !important;}
+  .inv-scroller{overflow:visible !important;}
+  #invoice{max-width:210mm !important;width:210mm !important;box-shadow:none !important;border-radius:0 !important;}
   .inv-hdr{background:#1a1f3c !important;}
   .inv-footer{background:#111526 !important;}
   .inv-total{background:#1a1f3c !important;}
   .inv-table thead tr{background:#1a1f3c !important;}
   .inv-strip{background:#c9a227 !important;}
-  .inv-bank{background:#fdf7e3 !important;border:1px solid rgba(201,162,39,.28) !important;break-inside:avoid !important;page-break-inside:avoid !important;}
+  .inv-bank{background:#fdf7e3 !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   .inv-party{background:#f7f9fd !important;break-inside:avoid !important;}
+  .inv-notes{background:#fafbff !important;break-inside:avoid !important;page-break-inside:avoid !important;}
   .inv-parties{break-inside:avoid !important;}
   .inv-table-wrap{break-inside:avoid !important;}
-  .inv-total{break-inside:avoid !important;}
   .inv-sign{break-inside:avoid !important;}
-  .inv-logo{filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,.35)) !important;}
   .add-row-btn{display:none !important;}
+  .inv-logo{filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,.35)) !important;}
 }
 </style>
 </head>
 <body>
 
+<!-- ══ LOCK SCREEN ══ -->
+<div id="lock-screen">
+  <div class="lock-card">
+    <img class="lock-logo" src="https://iili.io/qFmWUuf.png" alt="EJ Solutions">
+    <div class="lock-title">Eject Solutions</div>
+    <div class="lock-sub">INVOICE GENERATOR · SECURED ACCESS</div>
+    <div class="lock-dots" id="lock-dots">
+      <div class="lock-dot" id="d0"></div>
+      <div class="lock-dot" id="d1"></div>
+      <div class="lock-dot" id="d2"></div>
+      <div class="lock-dot" id="d3"></div>
+      <div class="lock-dot" id="d4"></div>
+      <div class="lock-dot" id="d5"></div>
+    </div>
+    <div class="lock-input-wrap">
+      <input class="lock-input" type="password" id="lock-input" maxlength="6" placeholder="••••••" autocomplete="off" oninput="onLockInput()" onkeydown="if(event.key==='Enter')checkCode()">
+      <button class="lock-toggle" id="lock-toggle" onclick="toggleLockVis()" title="Show/hide">👁</button>
+    </div>
+    <button class="lock-btn" onclick="checkCode()">Unlock →</button>
+    <div class="lock-error" id="lock-error">Incorrect code. Please try again.</div>
+  </div>
+</div>
+
+<!-- ══ APP BAR ══ -->
 <header class="app-bar">
   <div class="bar-left">
     <img class="bar-logo" src="https://iili.io/qFmWUuf.png" alt="EJ Solutions">
@@ -136,19 +245,23 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--navy);min
     </div>
   </div>
   <button class="btn-pdf" onclick="window.print()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Download PDF
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <span>Download PDF</span>
   </button>
 </header>
 
+<!-- ══ MOBILE TABS ══ -->
+<div class="mob-tabs">
+  <button class="mob-tab active" id="tab-form" onclick="switchTab('form')">✏️ Edit Details</button>
+  <button class="mob-tab" id="tab-preview" onclick="switchTab('preview')">👁 Preview Invoice</button>
+</div>
+
+<!-- ══ WORKSPACE ══ -->
 <div class="workspace">
 
   <!-- FORM -->
-  <aside class="form-panel">
-    <div class="fp-head">
-      <div class="fp-dot"></div>
-      <h2>Invoice Details</h2>
-    </div>
+  <aside class="form-panel mob-active" id="panel-form">
+    <div class="fp-head"><div class="fp-dot"></div><h2>Invoice Details</h2></div>
     <div class="fp-body">
 
       <div class="fsec">
@@ -170,7 +283,7 @@ The Arcade, Singapore – 049317</textarea></div>
         <div class="fsec-title">Student Rows</div>
         <div id="student-rows-form"></div>
         <button class="add-row-btn" onclick="addRow()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add Student Row
         </button>
       </div>
@@ -187,31 +300,21 @@ The Arcade, Singapore – 049317</textarea></div>
   </aside>
 
   <!-- PREVIEW -->
-  <div class="preview-wrap">
+  <div class="preview-wrap mob-active" id="panel-preview">
     <div class="preview-top">
       <span class="preview-label">Live Invoice Preview</span>
       <span class="preview-tip">Edits reflect instantly →</span>
     </div>
 
+    <div class="inv-scroller">
     <div id="invoice">
 
       <div class="inv-hdr">
-        <div class="inv-logo-box">
-          <img class="inv-logo" src="https://iili.io/qFmWUuf.png" alt="Eject Solutions">
-        </div>
+        <div class="inv-logo-box"><img class="inv-logo" src="https://iili.io/qFmWUuf.png" alt="Eject Solutions"></div>
         <div class="inv-contact-box">
-          <div class="inv-contact-row">
-            <span class="inv-contact-txt">+91 95028 74098</span>
-            <div class="ico-circle">📞</div>
-          </div>
-          <div class="inv-contact-row">
-            <span class="inv-contact-txt">hr@ejectsolutions.com</span>
-            <div class="ico-circle">✉️</div>
-          </div>
-          <div class="inv-contact-row">
-            <span class="inv-contact-txt">www.ejectsolutions.com</span>
-            <div class="ico-circle">🌐</div>
-          </div>
+          <div class="inv-contact-row"><span class="inv-contact-txt">+91 95028 74098</span><div class="ico-circle">📞</div></div>
+          <div class="inv-contact-row"><span class="inv-contact-txt">hr@ejectsolutions.com</span><div class="ico-circle">✉️</div></div>
+          <div class="inv-contact-row"><span class="inv-contact-txt">www.ejectsolutions.com</span><div class="ico-circle">🌐</div></div>
         </div>
       </div>
       <div class="inv-strip"></div>
@@ -234,42 +337,29 @@ The Arcade, Singapore – 049317</textarea></div>
           <div class="inv-party">
             <div class="inv-party-lbl">From</div>
             <div class="inv-party-name">Eject Solutions Private Limited</div>
-            <div class="inv-party-addr">
-              <strong>GSTIN:-</strong> 36AAHCE6818J1ZB<br>
-              <strong>PAN:-</strong> AAHCE6818J
-            </div>
+            <div class="inv-party-addr"><strong>GSTIN:-</strong> 36AAHCE6818J1ZB<br><strong>PAN:-</strong> AAHCE6818J</div>
           </div>
         </div>
 
         <div class="inv-table-wrap">
           <table class="inv-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Student Name</th>
-                <th>CSP / Centre Name</th>
-                <th>University</th>
-                <th>Tuition Fees</th>
-                <th>Currency</th>
-                <th>Commission @%</th>
-                <th>Commission in Currency</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th>#</th><th>Student Name</th><th>CSP / Centre Name</th><th>University</th>
+              <th>Tuition Fees</th><th>Currency</th><th>Commission @%</th><th>Commission in Currency</th>
+            </tr></thead>
             <tbody id="inv-tbody"></tbody>
           </table>
         </div>
 
-        <!-- Notes / Declaration -->
+        <!-- Terms & Declaration — 2 items only -->
         <div class="inv-notes">
           <div class="inv-notes-title">📋 Terms &amp; Declaration</div>
           <div class="inv-notes-grid">
             <div class="inv-notes-col">
-              <p><strong>Payment Terms:</strong> Payment is due within 30 days of invoice date. Please ensure the amount is transferred in the mentioned foreign currency only.</p>
-              <p><strong>Mode of Payment:</strong> Wire Transfer / SWIFT to the beneficiary bank account mentioned above. Please include the invoice number as payment reference.</p>
-                         </div>
+              <p><strong>Payment Terms:</strong> Payment is due within 30 days of invoice date. Please ensure the amount is transferred in the mentioned foreign currency only via SWIFT/Wire Transfer, with the invoice number as reference.</p>
+            </div>
             <div class="inv-notes-col">
-              <p><strong>Declaration:</strong> We hereby declare that the commission invoice raised is in accordance with the recruitment agreement executed between Eject Solutions Private Limited and the client, and the student enrollment has been duly confirmed by the respective university.</p>
-              <p><strong>Note:</strong> This is a system-generated invoice. For any discrepancies or queries, please contact us at hr@ejectsolutions.com or call +91 95028 74098 within 7 working days of receipt.</p>
+              <p><strong>Declaration:</strong> We hereby declare that this commission invoice is raised in accordance with the recruitment agreement between Eject Solutions Pvt. Ltd. and the client, with student enrollment duly confirmed by the respective university.</p>
             </div>
           </div>
         </div>
@@ -303,61 +393,85 @@ The Arcade, Singapore – 049317</textarea></div>
         <div class="inv-footer-txt">Plot.No: 40C, Flat No. 301, Addagutta Society, Pragathi Nagar Road, Kukatpally, Hyderabad - 500072, Telangana</div>
       </div>
 
-    </div>
+    </div><!-- /#invoice -->
+    </div><!-- /.inv-scroller -->
   </div>
 </div>
 
 <script>
-let rowCount = 0;
-const rows = [];
+/* ══ LOCK SCREEN ══ */
+const CODE = '846583';
+let lockVisible = false;
 
-function v(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
+function onLockInput(){
+  const val = document.getElementById('lock-input').value;
+  for(let i=0;i<6;i++){
+    document.getElementById('d'+i).classList.toggle('filled', i < val.length);
+  }
+  document.getElementById('lock-error').style.display = 'none';
+}
+
+function toggleLockVis(){
+  lockVisible = !lockVisible;
+  const inp = document.getElementById('lock-input');
+  inp.type = lockVisible ? 'text' : 'password';
+  document.getElementById('lock-toggle').textContent = lockVisible ? '🙈' : '👁';
+}
+
+function checkCode(){
+  const val = document.getElementById('lock-input').value.trim();
+  if(val === CODE){
+    const ls = document.getElementById('lock-screen');
+    ls.style.opacity = '0';
+    ls.style.transition = 'opacity .4s';
+    setTimeout(()=>{ ls.style.display='none'; }, 400);
+  } else {
+    const err = document.getElementById('lock-error');
+    err.style.display = 'block';
+    const inp = document.getElementById('lock-input');
+    inp.value = '';
+    inp.style.borderColor = '#e74c3c';
+    setTimeout(()=>{ inp.style.borderColor=''; }, 1000);
+    for(let i=0;i<6;i++) document.getElementById('d'+i).classList.remove('filled');
+  }
+}
+
+/* ══ MOBILE TABS ══ */
+function switchTab(tab){
+  const isForm = tab==='form';
+  document.getElementById('panel-form').classList.toggle('mob-active',isForm);
+  document.getElementById('panel-preview').classList.toggle('mob-active',!isForm);
+  document.getElementById('tab-form').classList.toggle('active',isForm);
+  document.getElementById('tab-preview').classList.toggle('active',!isForm);
+}
+
+/* ══ ROWS ══ */
+let rowCount=0; const rows=[];
+function v(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 
 function addRow(data){
   rowCount++;
-  const id = rowCount;
-  const d = data || {student:'',csp:'Hyderabad - Eject Solutions Pvt Ltd.',university:'',tuition:'',currency:'USD',pct:'',comm:''};
+  const id=rowCount;
+  const d=data||{student:'',csp:'Hyderabad - Eject Solutions Pvt Ltd.',university:'',tuition:'',currency:'USD',pct:'',comm:''};
   rows.push(id);
-
-  const div = document.createElement('div');
-  div.id = 'frow-'+id;
-  div.style.cssText='background:#f6f8fd;border:1.5px solid #dce3f0;border-radius:8px;padding:12px 13px;margin-bottom:10px;';
+  const div=document.createElement('div');
+  div.id='frow-'+id;
+  div.style.cssText='background:#f6f8fd;border:1.5px solid #dce3f0;border-radius:8px;padding:11px 12px;margin-bottom:9px;';
   div.innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
-      <span style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;">Student ${id}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:10px;font-weight:700;color:#c9a227;text-transform:uppercase;letter-spacing:1px;">Student ${id}</span>
       <button onclick="removeRow(${id})" style="background:#ffeaea;border:1px solid #f5c6c6;border-radius:5px;cursor:pointer;font-size:11px;color:#c0392b;padding:2px 8px;font-family:Poppins,sans-serif;font-weight:600;">✕ Remove</button>
     </div>
-    <div style="margin-bottom:6px;">
-      <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Student Name</label>
-      <input type="text" id="r${id}_student" value="${d.student}" placeholder="Full name" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-    </div>
-    <div style="margin-bottom:6px;">
-      <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">CSP / Centre Name</label>
-      <input type="text" id="r${id}_csp" value="${d.csp}" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-    </div>
-    <div style="margin-bottom:6px;">
-      <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">University</label>
-      <input type="text" id="r${id}_university" value="${d.university}" placeholder="University name" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-    </div>
+    <div style="margin-bottom:6px;"><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Student Name</label><input type="text" id="r${id}_student" value="${d.student}" placeholder="Full name" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
+    <div style="margin-bottom:6px;"><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">CSP / Centre Name</label><input type="text" id="r${id}_csp" value="${d.csp}" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
+    <div style="margin-bottom:6px;"><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">University</label><input type="text" id="r${id}_university" value="${d.university}" placeholder="University name" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-      <div>
-        <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Tuition Fees</label>
-        <input type="text" id="r${id}_tuition" value="${d.tuition}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-      </div>
-      <div>
-        <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Currency</label>
-        <input type="text" id="r${id}_currency" value="${d.currency}" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-      </div>
+      <div><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Tuition Fees</label><input type="text" id="r${id}_tuition" value="${d.tuition}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
+      <div><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Currency</label><input type="text" id="r${id}_currency" value="${d.currency}" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-      <div>
-        <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Commission %</label>
-        <input type="text" id="r${id}_pct" value="${d.pct}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-      </div>
-      <div>
-        <label style="display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Commission Amt</label>
-        <input type="text" id="r${id}_comm" value="${d.comm}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;">
-      </div>
+      <div><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Commission %</label><input type="text" id="r${id}_pct" value="${d.pct}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
+      <div><label style="display:block;font-size:9px;font-weight:600;color:#56607e;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;">Commission Amt</label><input type="text" id="r${id}_comm" value="${d.comm}" placeholder="0.00" oninput="renderTable()" style="width:100%;padding:7px 10px;border:1.5px solid #dce3f0;border-radius:6px;font-family:Poppins,sans-serif;font-size:12px;color:#1a1f3c;background:#fff;outline:none;"></div>
     </div>
   `;
   document.getElementById('student-rows-form').appendChild(div);
@@ -392,9 +506,9 @@ function renderTable(){
   });
 }
 
-// Simple bindings
+/* ══ BINDINGS ══ */
 [['f_inv_no','d_inv_no','text'],['f_date','d_date','text'],['f_to_name','d_to_name','text'],['f_to_addr','d_to_addr','html']].forEach(([s,d,t])=>{
-  const inp=document.getElementById(s), out=document.getElementById(d);
+  const inp=document.getElementById(s),out=document.getElementById(d);
   if(!inp||!out) return;
   inp.addEventListener('input',()=>{
     out[t==='html'?'innerHTML':'textContent']=t==='html'?inp.value.replace(/\n/g,'<br>'):inp.value;
@@ -407,7 +521,7 @@ function updateTotal(){
   document.getElementById('d_total').textContent=a+' '+c;
 }
 
-// Init
+/* ══ INIT ══ */
 addRow({student:'Murali Krishna Mathi',csp:'Hyderabad - Eject Solutions Pvt Ltd.',university:'Western New England (WNE) (LG)',tuition:'9925.00',currency:'USD',pct:'12.00',comm:'1191.00'});
 </script>
 </body>
